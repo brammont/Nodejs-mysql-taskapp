@@ -1,5 +1,6 @@
 CREATE DATABASE database_tasks;
 USE database_tasks;
+--tabla de usuarios--
 CREATE TABLE users(
     id INT(11) NOT NULL,
     username VARCHAR(16) NOT NULL,
@@ -13,13 +14,13 @@ ALTER TABLE users
     MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
 
 DESCRIBE users;
-
+--tabla de usuarios ---
 INSERT INTO users (id, username, password, fullname) 
   VALUES (1, 'john', 'password1', 'John Carter');
 
 SELECT * FROM users;
 
--- LINKS TABLE
+--  Tabla de tareas---
 CREATE TABLE tasks (
   id INT(11) NOT NULL,
   title VARCHAR(150) NOT NULL,   url VARCHAR(255) NOT NULL, description TEXT,
@@ -31,7 +32,7 @@ CREATE TABLE tasks (
 ALTER TABLE tasks
   ADD PRIMARY KEY (id);
 
-ALTER TABLE task
+ALTER TABLE tasks
   MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
 
-DESCRIBE links;
+DESCRIBE tasks;
