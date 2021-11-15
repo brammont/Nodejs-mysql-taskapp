@@ -24,7 +24,7 @@ app.use(express.json());
 //
 app.use(require('./routes'));
 app.use(require('./routes/authentication'));
-app.use('/task', require('./routes/task'));
+app.use('/tasks', require('./routes/task'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
