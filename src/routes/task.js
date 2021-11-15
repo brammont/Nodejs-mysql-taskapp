@@ -7,7 +7,7 @@ router.get('/crear', (req, res) => {
     res.render('tasks/add');
 });
 
-router.post('/crear', async (req, res) => {
+router.post('/add', async (req, res) => {
     const {title,url,description}= req.body;
     const newLink = {
         title,
@@ -15,13 +15,37 @@ router.post('/crear', async (req, res) => {
         description,
     };
     await pool.query('INSERT INTO links set ?', [newLink]); 
-    let result = await pool.query('SELECT * FROM users;');
-    res.send('task add');
     res.redirect('/tasks');
 });
 router.get('/', isLoggedIn, async (req, res) => {
     const tasks = await pool.query('SELECT * FROM links WHERE user_id = ?', [req.user.id]);
     res.render('tasks/list', { tasks });
+});
+router.get('/delete/:id', async (req, res) => {
+    const { id } = req.params;
+    await pool.query('DELETE FROM links WHERE ID = ?', [id]);
+    req.flash('success', 'Link Removed Successfully');
+    res.redirect('/links');
+});
+
+router.get('/edit/:id', async (req, res) => {
+    const { id } = req.params;
+    const links = await pool.query('SELECT * FROM links WHERE id = ?', [id]);
+    console.log(links);
+    res.render('tasks/edit', {link: links[0]});
+});
+
+router.post('/edit/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, description, url} = req.body; 
+    const newLink = {
+        title,
+        description,
+        url
+    };
+    await pool.query('UPDATE links set ? WHERE id = ?', [newLink, id]);
+    req.flash('success', 'Link Updated Successfully');
+    res.redirect('/tasks');
 });
 
 

@@ -2,6 +2,13 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const Handlebars = require('express-handlebars');
+const session = require('express-session');
+const validator = require('express-validator');
+const passport = require('passport');
+const flash = require('connect-flash');
+const MySQLStore = require('express-mysql-session')(session);
+const bodyParser = require('body-parser');
+
 //incio del servidor
 const app= express();
 //consfigraciones
@@ -20,7 +27,12 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 //variables globales
-
+app.use((req, res, next) => {
+  app.locals.message = req.flash('message');
+  app.locals.success = req.flash('success');
+  app.locals.user = req.user;
+  next();
+});
 //
 app.use(require('./routes'));
 app.use(require('./routes/authentication'));
