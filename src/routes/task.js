@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../database');
-
+const { isLoggedIn } = require('../lib/auth');
 
 router.get('/crear', (req, res) => {
     res.render('tasks/add');
@@ -14,12 +14,15 @@ router.post('/crear', async (req, res) => {
         url,
         description,
     };
-    console.log(newLink)
-    //await pool.query('INSERT INTO links set ?', [newLink]); 
+    await pool.query('INSERT INTO links set ?', [newLink]); 
     let result = await pool.query('SELECT * FROM users;');
-    console.log(result)
     res.send('task add');
     res.redirect('/tasks');
 });
+router.get('/', isLoggedIn, async (req, res) => {
+    const tasks = await pool.query('SELECT * FROM links WHERE user_id = ?', [req.user.id]);
+    res.render('tasks/list', { tasks });
+});
+
 
 module.exports= router;
